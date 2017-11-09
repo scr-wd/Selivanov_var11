@@ -383,20 +383,16 @@ header("Content-Type: text/html; charset=utf-8");
 
 //Задание№1 - "Вывести прайс-лист на принтеры (см. исходные данные в директории 01-printers) в порядке"
 
-echo "<h1>Printers' price-list:</h1>";
+echo "<h1>Прайс-лист на принтеры:</h1>";
 
-$keys = array();
-for ($i=0;$i<count($data);$i++)
-{
-	if (array_key_exists($i, $data))
-	{
-		foreach ($data[$i] as $index => $column)
-		{
-			$keys[] = $index;
-		};
-		break;
-	}
-};
+$keys = array(0 => '№',
+			  1 => 'Наименование',
+			  2 => 'Тип',
+			  3 => 'Описание',
+			  4 => 'Цена',
+			  5 => 'Изображение',
+			  6 => '<nobr>Яндекс-маркет</nobr>',);
+
 
 $newdata = array();
 $id = 'id';
@@ -406,6 +402,7 @@ $description = 'description';
 $prices = 'prices';
 $price = 'price';
 $amount = 'amount';
+$curName = 'curName';
 $mainPhoto = 'mainPhoto';
 $url = 'url';
 $width = 'width';
@@ -419,6 +416,7 @@ foreach($data as $i=>$value)
 	$newdata[$k]['kind'] = $data[$i][$kind];
 	$newdata[$k]['description'] = $data[$i][$description];
 	$newdata[$k]['price'] = $data[$i][$prices][$amount];
+	$newdata[$k]['curName'] = $data[$i][$prices][$curName];
 	$newdata[$k]['url'] = $data[$i][$mainPhoto][$url];
 	$newdata[$k]['width'] = $data[$i][$mainPhoto][$width];
 	$newdata[$k]['height'] = $data[$i][$mainPhoto][$height];
@@ -438,28 +436,26 @@ usort ($newdata, function($first, $second)
 
 
 
-echo "<table border=1>";
+echo "<table border=1 cellpadding='4'>";
 echo "<tr>";
-for ($i=0;$i<4;$i++)
+foreach($keys as $i => $value)
 {
-	echo "<td><p>$keys[$i]</p></td>";
-};
-for ($i=6;$i<9;$i++)
-{
-	echo "<td><p>$keys[$i]</p></td>";
+	echo "<td><p>$value</p></td>";
 };
 
 echo "</tr><tr></tr><tr></tr><tr></tr>";
 foreach($newdata as $i=>$value)
 {
 	echo "<tr>";
-	echo "<td><p>".$newdata[$i][$id]."</p></td>";
-	echo "<td><p>".$newdata[$i][$name]."</p></td>";
-	echo "<td><p>".$newdata[$i][$kind]."</p></td>";
-	echo "<td><p>".$newdata[$i][$description]."</p></td>";
-	echo "<td><p>".$newdata[$i][$price]."</p></td>";
-	echo '<td><p><img  src="'.$newdata[$i][$url].'" width="'.$newdata[$i][$width].'" height="'.$newdata[$i][$height].'"></p></td>';
-	echo '<td><p><a href="'.$newdata[$i][$link].'">Подробнее</a></p></td>';
+	echo "<td><p>".htmlspecialchars($newdata[$i][$id], ENT_NOQUOTES)."</p></td>";
+	echo "<td><p>".htmlspecialchars($newdata[$i][$name], ENT_NOQUOTES)."</p></td>";
+	echo "<td><p>".htmlspecialchars($newdata[$i][$kind], ENT_NOQUOTES)."</p></td>";
+	echo "<td><p>".htmlspecialchars($newdata[$i][$description], ENT_NOQUOTES)."</p></td>";
+	echo "<td><p><nobr>".htmlspecialchars($newdata[$i][$price], ENT_NOQUOTES)." ".htmlspecialchars($newdata[$i][$curName], ENT_NOQUOTES)."</nobr></p></td>";
+	$newdata[$i][$width] = $newdata[$i][$width] * 0.4;
+	$newdata[$i][$height] = $newdata[$i][$height] * 0.4;
+	echo "<td><p><img  src='".$newdata[$i][$url]."' width='".$newdata[$i][$width]."' height='".$newdata[$i][$height]."'></p></td>";
+	echo "<td><p><a href='".$newdata[$i][$link]."'>Подробнее</a></p></td>";
 	echo "</tr>";
 };
 echo "</table>";
@@ -471,7 +467,10 @@ echo "</table>";
 
 //Задание№2 - "Отдельно вывести список производителей и средний рейтинг каждого"
 
-echo "<h2>Vendors' rating-list:</h2>";
+echo "<h2>Средний рейтинг производителей:</h2>";
+
+$keys = array(0 => 'Производитель',
+			  1 => 'Средний рейтинг',);
 
 $newdata1 = array();
 $vendor = 'vendor';
@@ -502,7 +501,7 @@ foreach($newdata1 as $val)
 				$temp[] = $value[$rating];
 			}
 		}
-		$temp_rait = array_sum($temp)/count($temp);
+		$temp_rait = round(array_sum($temp)/count($temp), 2);
 		$val[$rating] = $temp_rait;
 		$newdata1_unic[$i] = $val;
 		$i++;
@@ -512,19 +511,19 @@ foreach($newdata1 as $val)
 
 
 
-echo "<table border=1>";
+echo "<table border=1 cellpadding='4'>";
 echo "<tr>";
-$i=10;
-	echo "<td><p>$keys[$i]</p></td>";
-$i=13;
-echo "<td><p>$keys[$i]</p></td>";
+foreach($keys as $i => $value)
+{
+	echo "<td><p>$value</p></td>";
+};
 echo "</tr><tr></tr><tr></tr>";
 for ($k=0;$k<count($newdata1_unic);$k++)
 {
 	echo "<tr>";
 	foreach ($newdata1_unic[$k] as $value)
 	{
-		echo "<td><p>".$value."</p></td>";
+		echo "<td><p>".htmlspecialchars($value, ENT_NOQUOTES)."</p></td>";
 	};
 	echo "</tr>";
 };
