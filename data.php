@@ -451,7 +451,7 @@ foreach($newdata as $i=>$value)
 	echo "<td><p>".htmlspecialchars($newdata[$i][$name], ENT_NOQUOTES)."</p></td>";
 	echo "<td><p>".htmlspecialchars($newdata[$i][$kind], ENT_NOQUOTES)."</p></td>";
 	echo "<td><p>".htmlspecialchars($newdata[$i][$description], ENT_NOQUOTES)."</p></td>";
-	echo "<td><p><nobr>".htmlspecialchars($newdata[$i][$price], ENT_NOQUOTES)." ".htmlspecialchars($newdata[$i][$curName], ENT_NOQUOTES)."</nobr></p></td>";
+	echo "<td><p><nobr>".htmlspecialchars(number_format($newdata[$i][$price], 0, ',', ' ' ), ENT_NOQUOTES)." ".htmlspecialchars($newdata[$i][$curName], ENT_NOQUOTES)."</nobr></p></td>";
 	$newdata[$i][$width] = $newdata[$i][$width] * 0.4;
 	$newdata[$i][$height] = $newdata[$i][$height] * 0.4;
 	echo "<td><p><img  src='".$newdata[$i][$url]."' width='".$newdata[$i][$width]."' height='".$newdata[$i][$height]."'></p></td>";
